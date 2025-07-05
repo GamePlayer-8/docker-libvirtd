@@ -1,0 +1,59 @@
+services:
+  libvirt:
+    restart: unless-stopped
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    privileged: false
+    devices:
+      - "/dev/kvm:/dev/kvm"
+      - "/dev/net/tun:/dev/net/tun"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./authorized_keys:/home/virtual/.ssh/authorized_keys:ro
+      - libvirt-storage:/etc/libvirt/storage
+      - libvirt-qemu:/etc/libvirt/qemu
+      - libvirt-network:/etc/libvirt/qemu/networks
+      - libvirt-data:/var/lib/libvirt
+      - ./iso:/var/lib/libvirt/iso:ro
+      - openvswitch:/etc/openvswitch
+      - ssh-keystore:/etc/ssh
+    tmpfs:
+      - "/tmp:rw,exec,mode=1777"
+      - "/var/run:rw,exec,mode=1777"
+      - "/var/tmp:rw,exec,mode=1777"
+      - "/var/log:rw,exec,mode=1777"
+    cap_add:
+      - NET_ADMIN
+      - NET_BROADCAST
+    healthcheck:
+      test: "virsh -q connect"
+      interval: 5s
+      retries: 20
+    networks:
+      libvirt:
+        ipv4_address: 172.16.3.50
+
+volumes:
+  libvirt-storage:
+    external: false
+  libvirt-qemu:
+    external: false
+  libvirt-network:
+    external: false
+  libvirt-data:
+    external: false
+  openvswitch:
+    external: false
+  ssh-keystore:
+    external: false
+
+networks:
+  libvirt:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.3.0/24
+        - subnet: fd4d:6169:6c63:5f76::/64

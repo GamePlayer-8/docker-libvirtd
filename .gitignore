@@ -1,4 +1,4 @@
 ssh-key
 ssh-key.pub
 authorized_keys
-./iso
+iso
