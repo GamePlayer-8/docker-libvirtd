@@ -65,13 +65,13 @@ RUN echo "remember_owner = 0" >> /etc/libvirt/qemu.conf
 #RUN echo "dynamic_ownership = 0" >> /etc/libvirt/qemu.conf
 
 COPY --from=builder /opt/supervisor /opt/supervisor
-COPY --chmod=755 ./scripts/socket.sh /usr/local/bin/check-socket
-COPY --chmod=440 ./config/sshd.conf /var/lib/sshSetup/sshd_config.d/virtual.conf
-COPY --chmod=755 ./scripts/dbusUp.sh /usr/local/bin/dbusUp
-COPY --chmod=755 ./scripts/dbus-socket.sh /usr/local/bin/dbus-socket
-COPY --chmod=755 ./scripts/vswitch-init.sh /usr/local/bin/vswitch-init
-COPY --chmod=755 ./scripts/ssh-keystore.sh /usr/local/bin/ssh-keystore
-COPY --chmod=640 ./config/supervisord.conf /etc/supervisord.conf
+COPY --chmod=755 scripts/socket.sh /usr/local/bin/check-socket
+COPY --chmod=440 sshd.conf /var/lib/sshSetup/sshd_config.d/virtual.conf
+COPY --chmod=755 scripts/dbusUp.sh /usr/local/bin/dbusUp
+COPY --chmod=755 scripts/dbus-socket.sh /usr/local/bin/dbus-socket
+COPY --chmod=755 scripts/vswitch-init.sh /usr/local/bin/vswitch-init
+COPY --chmod=755 scripts/ssh-keystore.sh /usr/local/bin/ssh-keystore
+COPY --chmod=640 supervisord.conf /etc/supervisord.conf
 
 RUN adduser -D -s /bin/bash virtual; \
 	usermod -aG libvirt virtual; \
