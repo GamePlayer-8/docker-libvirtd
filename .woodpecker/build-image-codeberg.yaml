@@ -11,18 +11,15 @@ when:
   event: [push, pull_request, manual]
 
 variables:
-  - &file Dockerfile
+  - &context src
+  - &file src/Dockerfile
   - &repo https://git.chimmie.k.vu/GamePlayer-8/docker-libvirtd
 
 steps:
-  prepare:
-    image: alpine:3.22
-    commands:
-      - cp src/* . -r
-
   dryrun:
     image: woodpeckerci/plugin-docker-buildx
     settings:
+      context: *context
       dockerfile: *file
       platforms: linux/amd64
       dry_run: true
@@ -37,6 +34,7 @@ steps:
     settings:
       insecure: true
       ipv6: true
+      context: *context
       dockerfile: *file
       platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/riscv64
       repo: codeberg.org/gameplayer-8/${CI_REPO_NAME}
