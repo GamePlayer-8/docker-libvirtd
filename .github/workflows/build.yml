@@ -114,7 +114,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_REPO }}
-          readme-filepath: ./readme.md
+          readme-filepath: ./README.md
 #      -
 #        name: Create a release
 #        if: env.exists == 'false'
