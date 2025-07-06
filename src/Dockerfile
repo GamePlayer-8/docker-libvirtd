@@ -17,45 +17,11 @@ RUN . /opt/supervisor/bin/activate; \
 
 FROM alpine:3.22 AS runtime
 
-RUN apk add --no-cache \
-	py3-pip \
-	py3-virtualenv \
-	ovmf \
-	edk2 \
-	seabios \
-	libvirt-client \
-	libvirt-daemon \
-	libvirt-common-drivers \
-	libvirt-qemu \
-	qemu-system-x86_64 \
-	qemu-system-i386 \
-	qemu-audio-alsa \
-	qemu-audio-oss \
-	qemu-audio-pa \
-	qemu-audio-sdl \
-	qemu-audio-spice \
-	qemu-block-curl \
-	qemu-block-dmg-bz2 \
-	qemu-block-nfs \
-	qemu-block-ssh \
-	qemu-chardev-spice \
-	qemu-hw-display-qxl \
-	qemu-hw-display-virtio-gpu \
-	qemu-hw-display-virtio-gpu-pci \
-	qemu-hw-display-virtio-vga \
-	qemu-hw-usb-redirect \
-	qemu-img \
-	dbus \
-	polkit \
-	iproute2 \
-	eudev \
-	openssh-server \
-	openssh-sftp-server \
-	openssh-server-pam \
-	rsync \
-	shadow \
-	bash \
-	openvswitch
+ARG TARGETARCH
+
+COPY --chmod=755 scripts/Dockerfile-packages.sh /usr/local/bin/packages
+
+RUN /usr/local/bin/packages
 
 RUN mkdir /var/lib/sshSetup; \
 	mv /etc/ssh/* /var/lib/sshSetup/
